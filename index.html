@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartStudy AI - Learning Scheduler</title>
+    <title>SmartStudy AI - Granular Learning Scheduler</title>
     <style>
         :root {
             --primary-color: #4a90e2;
@@ -23,7 +23,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
             background: #ffffff;
             padding: 30px;
@@ -162,6 +162,19 @@
             text-decoration: line-through;
             color: #888888;
         }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 5px;
+        }
+        .badge-concept { background-color: #e67e22; }
+        .badge-practice { background-color: #9b59b6; }
+        .badge-review { background-color: #16a085; }
     </style>
 </head>
 <body>
@@ -181,8 +194,8 @@
         </div>
         
         <div class="form-group">
-            <label for="weak-topics">Topics Needing Focus (Weak Areas)</label>
-            <input type="text" id="weak-topics" placeholder="e.g., ArrayList, Recursion" value="ArrayList, Recursion">
+            <label for="weak-topics">Topics Needing Focus (Separate by comma)</label>
+            <input type="text" id="weak-topics" placeholder="e.g., ArrayList, Recursion, 2D Arrays" value="ArrayList, Recursion">
         </div>
         
         <div class="form-group">
@@ -190,11 +203,11 @@
             <input type="number" id="study-hours" min="1" max="24" value="2">
         </div>
         
-        <button type="button" onclick="generatePlan()">Generate AI Custom Plan</button>
+        <button type="button" onclick="generateDetailedPlan()">Generate AI Granular Plan</button>
     </div>
 
     <div id="result-section" class="result-section">
-        <h2>Your Learning Dashboard</h2>
+        <h2>Your Detailed Learning Dashboard</h2>
         
         <div class="dashboard">
             <div class="dashboard-item">
@@ -202,7 +215,7 @@
                 <div id="d-day-val" class="value">D-00</div>
             </div>
             <div class="dashboard-item">
-                <div>Current Completion Rate</div>
+                <div>Tasks Completed</div>
                 <div id="progress-val" class="value">0%</div>
             </div>
         </div>
@@ -212,13 +225,13 @@
             <div id="progress-bar" class="progress-bar"></div>
         </div>
 
-        <h2>Recommended Study Schedule (AI Mock Output)</h2>
+        <h2>Granular Study Schedule (AI Optimized Micro-tasks)</h2>
         <table id="schedule-table">
             <thead>
                 <tr>
                     <th class="checkbox-cell">Done</th>
-                    <th>Timeline</th>
-                    <th>Study Tasks & Contents</th>
+                    <th style="width: 150px;">Timeline</th>
+                    <th>Detailed Task Breakdown</th>
                 </tr>
             </thead>
             <tbody id="schedule-body">
@@ -228,14 +241,14 @@
 </div>
 
 <script>
-    function generatePlan() {
+    function generateDetailedPlan() {
         const examDateInput = document.getElementById('exam-date').value;
         if (!examDateInput) {
             alert('Please select an exam date!');
             return;
         }
 
-        // 1. D-Day Calculation Logic (CS Core Concept Alignment)
+        // 1. D-Day 계산 로직
         const today = new Date();
         const examDate = new Date(examDateInput);
         const timeDiff = examDate.getTime() - today.getTime();
@@ -243,37 +256,77 @@
         
         document.getElementById('d-day-val').innerText = dDay > 0 ? `D-${dDay}` : (dDay === 0 ? "D-Day" : `Passed`);
 
-        // 2. Structuring Mock Response (Emulating future AI API payload parsing)
-        const weakTopic = document.getElementById('weak-topics').value || "Core Theories";
+        // 2. 입력된 취약 단원을 배열(Array)로 분리 처리 (String.split 활용 알고리즘)
+        const weakTopicsInput = document.getElementById('weak-topics').value || "Core Logic";
+        const topicsArray = weakTopicsInput.split(',').map(item => item.trim());
         const hours = document.getElementById('study-hours').value || "2";
         
-        const mockTemplates = [
-            { period: "Week 1: Foundations", task: `Intensive study on [${weakTopic}] conceptual review and example analysis (${hours} hours/day).` },
-            { period: "Week 2: Practice", task: "Solve relevant multiple-choice questions (MCQs) and review underlying algorithm structures." },
-            { period: "Week 3: FRQ Practice", task: "Execute timed Free Response Questions (FRQs) and analyze structural constraints." },
-            { period: "Day Before Exam", task: "Final review of personal error logs and performance optimization templates." }
-        ];
+        const scheduleBody = document.getElementById('schedule-body');
+        scheduleBody.innerHTML = ""; // 이전 데이터 초기화
 
-        const tbody = document.getElementById('schedule-body');
-        tbody.innerHTML = ""; // Clear existing records
+        let globalIndex = 0;
 
-        mockTemplates.forEach((item, index) => {
-            const row = document.createElement('tr');
-            
-            row.innerHTML = `
-                <td class="checkbox-cell"><input type="checkbox" onchange="updateProgress()" id="check-${index}"></td>
-                <td><strong>${item.period}</strong></td>
-                <td id="text-${index}">${item.task}</td>
-            `;
-            tbody.appendChild(row);
+        // 3. 각 취약 단원별로 '구체적인 4단계 세부 계획'을 동적 생성하는 반복문 알고리즘
+        topicsArray.forEach((topic, tIdx) => {
+            const steps = [
+                { 
+                    phase: `Phase 1 (Day ${tIdx * 4 + 1})`, 
+                    type: '<span class="badge badge-concept">Concept</span>',
+                    task: `Review core syntax and memory structures for <strong>[${topic}]</strong>. Study class/method design limitations for ${hours} hours.` 
+                },
+                { 
+                    phase: `Phase 2 (Day ${tIdx * 4 + 2})`, 
+                    type: '<span class="badge badge-practice">Practice</span>',
+                    task: `Solve 15 Multiple Choice Questions (MCQs) focusing on <strong>[${topic}]</strong> trace logic and edge cases.` 
+                },
+                { 
+                    phase: `Phase 3 (Day ${tIdx * 4 + 3})`, 
+                    type: '<span class="badge badge-practice">FRQ Coding</span>',
+                    task: `Write out a full Free Response Question (FRQ) solution involving <strong>[${topic}]</strong> on paper, then test logic behaviors.` 
+                },
+                { 
+                    phase: `Phase 4 (Day ${tIdx * 4 + 4})`, 
+                    type: '<span class="badge badge-review">Review</span>',
+                    task: `Build a personalized error log for <strong>[${topic}]</strong>. Document runtime errors or logic bugs found during coding.` 
+                }
+            ];
+
+            // 생성된 세부 계획을 테이블 행(Row)으로 추가
+            steps.forEach(step => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="checkbox-cell"><input type="checkbox" onchange="updateProgress()" id="check-${globalIndex}"></td>
+                    <td><strong>${step.phase}</strong></td>
+                    <td id="text-${globalIndex}">${step.type} ${step.task}</td>
+                `;
+                scheduleBody.appendChild(row);
+                globalIndex++;
+            });
         });
 
-        // Toggle UI Display Visibility
+        // 4. 시험 직전 파이널 세부 계획 추가
+        const finalSteps = [
+            { phase: "Exam D-3", type: '<span class="badge badge-review">Mock Exam</span>', task: "Take a full-length timed diagnostic mock exam covering all units." },
+            { phase: "Exam D-1", type: '<span class="badge badge-review">Final Check</span>', task: `Quick review of the generated error logs. Double check AP Java Quick Reference sheet formulas.` }
+        ];
+
+        finalSteps.forEach(step => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="checkbox-cell"><input type="checkbox" onchange="updateProgress()" id="check-${globalIndex}"></td>
+                <td><span style="color: #e74c3c;"><strong>${step.phase}</strong></span></td>
+                <td id="text-${globalIndex}">${step.type} ${step.task}</td>
+            `;
+            scheduleBody.appendChild(row);
+            globalIndex++;
+        });
+
+        // 결과 화면 토글 및 프로그레스 바 초기화
         document.getElementById('result-section').style.display = 'block';
         updateProgress();
     }
 
-    // 3. Progress Metric Calculation Algorithm (Looping and Boolean evaluation)
+    // 5. 전체 진행도 실시간 계산 알고리즘
     function updateProgress() {
         const checkboxes = document.querySelectorAll('#schedule-body input[type="checkbox"]');
         if (checkboxes.length === 0) return;
@@ -289,11 +342,9 @@
             }
         });
 
-        // Numeric percentage conversion logic
         const percentage = Math.round((checkedCount / checkboxes.length) * 100);
         
-        // Dynamic DOM style updates
-        document.getElementById('progress-val').innerText = `${percentage}%`;
+        document.getElementById('progress-val').innerText = `${checkedCount} / ${checkboxes.length} (${percentage}%)`;
         document.getElementById('progress-bar').style.width = `${percentage}%`;
     }
 </script>
