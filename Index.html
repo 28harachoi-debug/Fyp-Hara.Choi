@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartStudy AI - Learning Scheduler</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f7fa;
+            --text-color: #333333;
+            --accent-color: #2ecc71;
+            --border-color: #dddddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        .result-section {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .dashboard-item .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .progress-bar-container {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            width: 100%;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: var(--accent-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
