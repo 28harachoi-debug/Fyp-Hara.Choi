@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartStudy AI - Granular Learning Scheduler</title>
+    <title>SmartStudy AI - Emergency 30-Day Crash Course Planner</title>
     <style>
         :root {
-            --primary-color: #4a90e2;
+            --primary-color: #e74c3c; /* 긴급 상황을 나타내는 Red 계열로 변경 */
             --secondary-color: #f5f7fa;
             --text-color: #333333;
             --accent-color: #2ecc71;
@@ -64,6 +64,12 @@
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 1rem;
+            background-color: #fafafa;
+        }
+
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
         }
 
         button {
@@ -81,7 +87,7 @@
         }
 
         button:hover {
-            background-color: #357abd;
+            background-color: #c0392b;
         }
 
         .result-section {
@@ -96,6 +102,7 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
         }
 
         .dashboard-item {
@@ -161,6 +168,7 @@
         .completed-text {
             text-decoration: line-through;
             color: #888888;
+            opacity: 0.6;
         }
 
         .badge {
@@ -172,66 +180,71 @@
             color: white;
             margin-right: 5px;
         }
-        .badge-concept { background-color: #e67e22; }
-        .badge-practice { background-color: #9b59b6; }
+        .badge-danger { background-color: #e74c3c; }
+        .badge-theory { background-color: #e67e22; }
+        .badge-code { background-color: #2980b9; }
         .badge-review { background-color: #16a085; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>SmartStudy AI Planner</h1>
+    <h1>SmartStudy AI: 30-Day Crash Course</h1>
     
     <div id="planner-form">
         <div class="form-group">
             <label for="exam-name">Target Exam Name</label>
-            <input type="text" id="exam-name" placeholder="e.g., AP Computer Science A" value="AP Computer Science A">
+            <input type="text" id="exam-name" value="AP Computer Science A" readonly>
         </div>
         
         <div class="form-group">
-            <label for="exam-date">Exam Date</label>
-            <input type="date" id="exam-date" value="2026-11-06">
+            <label for="exam-date">Set Exam Date (Set to 30 days from now for testing)</label>
+            <input type="date" id="exam-date">
         </div>
         
         <div class="form-group">
-            <label for="weak-topics">Topics Needing Focus (Separate by comma)</label>
-            <input type="text" id="weak-topics" placeholder="e.g., ArrayList, Recursion, 2D Arrays" value="ArrayList, Recursion">
+            <label for="weak-topics">Current Status</label>
+            <input type="text" id="weak-topics" value="Zero-Base / Absolute Beginner (All Units Needed)" readonly>
         </div>
         
         <div class="form-group">
-            <label for="study-hours">Daily Available Study Time (Hours)</label>
-            <input type="number" id="study-hours" min="1" max="24" value="2">
+            <label for="study-hours">Daily Intensive Study Time (Fixed)</label>
+            <input type="text" id="study-hours" value="3 Hours / Day" readonly>
         </div>
         
-        <button type="button" onclick="generateDetailedPlan()">Generate AI Granular Plan</button>
+        <button type="button" onclick="generateEmergencyPlan()">Generate 30-Day Emergency Roadmap</button>
     </div>
 
     <div id="result-section" class="result-section">
-        <h2>Your Detailed Learning Dashboard</h2>
+        <h2>🚨 Emergency Learning Dashboard</h2>
         
         <div class="dashboard">
             <div class="dashboard-item">
-                <div>Time Remaining</div>
-                <div id="d-day-val" class="value">D-00</div>
+                <div>Status Alert</div>
+                <div class="value" style="font-size: 1.1rem; margin-top: 5px;"><span class="badge badge-danger">CRASH COURSE ACTIVE</span></div>
             </div>
             <div class="dashboard-item">
-                <div>Tasks Completed</div>
+                <div>Time Remaining</div>
+                <div id="d-day-val" class="value">D-30</div>
+            </div>
+            <div class="dashboard-item">
+                <div>Milestones Met</div>
                 <div id="progress-val" class="value">0%</div>
             </div>
         </div>
 
-        <label>Overall Progress</label>
+        <label>Overall 30-Day Completion</label>
         <div class="progress-bar-container">
             <div id="progress-bar" class="progress-bar"></div>
         </div>
 
-        <h2>Granular Study Schedule (AI Optimized Micro-tasks)</h2>
+        <h2>30-Day Day-by-Day Micro-Tasks (No Gaps)</h2>
         <table id="schedule-table">
             <thead>
                 <tr>
                     <th class="checkbox-cell">Done</th>
-                    <th style="width: 150px;">Timeline</th>
-                    <th>Detailed Task Breakdown</th>
+                    <th style="width: 100px;">Timeline</th>
+                    <th>Intensive Curriculum Breakdown (3 Hours Daily)</th>
                 </tr>
             </thead>
             <tbody id="schedule-body">
@@ -241,92 +254,81 @@
 </div>
 
 <script>
-    function generateDetailedPlan() {
+    // 페이지 로드 시 자동으로 오늘 기준 30일 뒤를 기본 날짜로 세팅해 주는 편의 기능
+    window.onload = function() {
+        const defaultDate = new Date();
+        defaultDate.setDate(defaultDate.getDate() + 30);
+        document.getElementById('exam-date').value = defaultDate.toISOString().split('T')[0];
+    }
+
+    function generateEmergencyPlan() {
         const examDateInput = document.getElementById('exam-date').value;
         if (!examDateInput) {
             alert('Please select an exam date!');
             return;
         }
 
-        // 1. D-Day 계산 로직
         const today = new Date();
         const examDate = new Date(examDateInput);
         const timeDiff = examDate.getTime() - today.getTime();
         const dDay = Math.ceil(timeDiff / (1000 * 3600 * 24));
         
-        document.getElementById('d-day-val').innerText = dDay > 0 ? `D-${dDay}` : (dDay === 0 ? "D-Day" : `Passed`);
+        document.getElementById('d-day-val').innerText = `D-${dDay}`;
 
-        // 2. 입력된 취약 단원을 배열(Array)로 분리 처리 (String.split 활용 알고리즘)
-        const weakTopicsInput = document.getElementById('weak-topics').value || "Core Logic";
-        const topicsArray = weakTopicsInput.split(',').map(item => item.trim());
-        const hours = document.getElementById('study-hours').value || "2";
-        
         const scheduleBody = document.getElementById('schedule-body');
-        scheduleBody.innerHTML = ""; // 이전 데이터 초기화
+        scheduleBody.innerHTML = ""; // 초기화
 
-        let globalIndex = 0;
-
-        // 3. 각 취약 단원별로 '구체적인 4단계 세부 계획'을 동적 생성하는 반복문 알고리즘
-        topicsArray.forEach((topic, tIdx) => {
-            const steps = [
-                { 
-                    phase: `Phase 1 (Day ${tIdx * 4 + 1})`, 
-                    type: '<span class="badge badge-concept">Concept</span>',
-                    task: `Review core syntax and memory structures for <strong>[${topic}]</strong>. Study class/method design limitations for ${hours} hours.` 
-                },
-                { 
-                    phase: `Phase 2 (Day ${tIdx * 4 + 2})`, 
-                    type: '<span class="badge badge-practice">Practice</span>',
-                    task: `Solve 15 Multiple Choice Questions (MCQs) focusing on <strong>[${topic}]</strong> trace logic and edge cases.` 
-                },
-                { 
-                    phase: `Phase 3 (Day ${tIdx * 4 + 3})`, 
-                    type: '<span class="badge badge-practice">FRQ Coding</span>',
-                    task: `Write out a full Free Response Question (FRQ) solution involving <strong>[${topic}]</strong> on paper, then test logic behaviors.` 
-                },
-                { 
-                    phase: `Phase 4 (Day ${tIdx * 4 + 4})`, 
-                    type: '<span class="badge badge-review">Review</span>',
-                    task: `Build a personalized error log for <strong>[${topic}]</strong>. Document runtime errors or logic bugs found during coding.` 
-                }
-            ];
-
-            // 생성된 세부 계획을 테이블 행(Row)으로 추가
-            steps.forEach(step => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="checkbox-cell"><input type="checkbox" onchange="updateProgress()" id="check-${globalIndex}"></td>
-                    <td><strong>${step.phase}</strong></td>
-                    <td id="text-${globalIndex}">${step.type} ${step.task}</td>
-                `;
-                scheduleBody.appendChild(row);
-                globalIndex++;
-            });
-        });
-
-        // 4. 시험 직전 파이널 세부 계획 추가
-        const finalSteps = [
-            { phase: "Exam D-3", type: '<span class="badge badge-review">Mock Exam</span>', task: "Take a full-length timed diagnostic mock exam covering all units." },
-            { phase: "Exam D-1", type: '<span class="badge badge-review">Final Check</span>', task: `Quick review of the generated error logs. Double check AP Java Quick Reference sheet formulas.` }
+        // 30일 노베이스 탈출 최적화 커리큘럼 데이터 배열 (총 30개 항목)
+        const emergencyCurriculum = [
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 1: Primitive Types & Variables. Study int, double, boolean and casting fundamentals." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 1 Practice: Write basic arithmetic expressions and trace system outputs." },
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 2: Using Objects. Understand String methods, Math class, and Wrapper classes." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 2 Practice: Instantiating objects and calling methods with parameters." },
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 3: Boolean Expressions & If Statements. Conditional logic and De Morgan's Laws." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 3 Practice: Write nested if-else structures and truth table check logs." },
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 4: Iteration. Mastering for loops, while loops, and string loops." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 4 Practice: Code nested loops to print patterns and trace loop iterations." },
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 5: Writing Classes. Understanding constructors, encapsulation, and documentation." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 5 Practice: Design a custom class from scratch with private variables and public methods." },
+            
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 6: Arrays. 1D Array creation, indexing, and traversal algorithms." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 6 Practice: Code basic array algorithms (finding min/max, calculating averages)." },
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 7: ArrayList. Understanding dynamic lists, methods (add, remove, set), and bounds." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 7 Practice: Write loops to modify ArrayLists safely without concurrent errors." },
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 8: 2D Arrays. Row-major vs Column-major order tracking structures." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 8 Practice: Traverse 2D arrays using nested loops to search or filter values." },
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 9: Inheritance. Superclasses, subclasses, polymorphism, and method overriding." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 9 Practice: Build inheritance hierarchies and test polymorphic method behaviors." },
+            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 10: Recursion. Base cases, recursive calls, and tracing recursion trees." },
+            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 10 Practice: Manually trace recursive code blocks and identify stack overflow bugs." },
+            
+            { type: '<span class="badge badge-review">FRQ Core</span>', task: "FRQ Strategy Day 1: Methods and Control Structures (Focusing on Unit 1-4 elements)." },
+            { type: '<span class="badge badge-review">FRQ Core</span>', task: "FRQ Strategy Day 2: Class Design requirements. Write comprehensive structures on paper." },
+            { type: '<span class="badge badge-review">FRQ Core</span>', task: "FRQ Strategy Day 3: Array/ArrayList manipulation routines (The highest scoring criteria)." },
+            { type: '<span class="badge badge-review">FRQ Core</span>', task: "FRQ Strategy Day 4: 2D Array grids traversal techniques and boundary setups." },
+            { type: '<span class="badge badge-review">Mock Exam</span>', task: "Full Diagnostic Mock Test 1: Real-time mock session under strict limits." },
+            { type: '<span class="badge badge-review">Review</span>', task: "Deconstruct Mock Test 1: Log mistakes, isolate logic gaps, re-read concepts." },
+            { type: '<span class="badge badge-review">Mock Exam</span>', task: "Full Diagnostic Mock Test 2: Apply fixes to elevate scoring trends." },
+            { type: '<span class="badge badge-review">Review</span>', task: "Deconstruct Mock Test 2: Double check AP Java Quick Reference sheets definitions." },
+            { type: '<span class="badge badge-danger">Final Check</span>', task: "Review unified personal error log records and review critical default keywords." },
+            { type: '<span class="badge badge-danger">Exam Day</span>', task: "Final Mind Control. Trust the 30 days of consistent 3-hour daily execution." }
         ];
 
-        finalSteps.forEach(step => {
+        // 1일부터 30일까지 빈틈없이 테이블 행 생성 알고리즘
+        for (let i = 0; i < 30; i++) {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td class="checkbox-cell"><input type="checkbox" onchange="updateProgress()" id="check-${globalIndex}"></td>
-                <td><span style="color: #e74c3c;"><strong>${step.phase}</strong></span></td>
-                <td id="text-${globalIndex}">${step.type} ${step.task}</td>
+                <td class="checkbox-cell"><input type="checkbox" onchange="updateProgress()" id="check-${i}"></td>
+                <td><strong>Day ${i + 1}</strong></td>
+                <td id="text-${i}">${emergencyCurriculum[i].type} ${emergencyCurriculum[i].task}</td>
             `;
             scheduleBody.appendChild(row);
-            globalIndex++;
-        });
+        }
 
-        // 결과 화면 토글 및 프로그레스 바 초기화
         document.getElementById('result-section').style.display = 'block';
         updateProgress();
     }
 
-    // 5. 전체 진행도 실시간 계산 알고리즘
     function updateProgress() {
         const checkboxes = document.querySelectorAll('#schedule-body input[type="checkbox"]');
         if (checkboxes.length === 0) return;
