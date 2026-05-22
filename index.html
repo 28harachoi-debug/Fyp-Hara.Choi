@@ -134,3 +134,169 @@
 
         th, td {
             border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .checkbox-cell {
+            text-align: center;
+            width: 50px;
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .completed-text {
+            text-decoration: line-through;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>SmartStudy AI Planner</h1>
+    
+    <div id="planner-form">
+        <div class="form-group">
+            <label for="exam-name">Target Exam Name</label>
+            <input type="text" id="exam-name" placeholder="e.g., AP Computer Science A" value="AP Computer Science A">
+        </div>
+        
+        <div class="form-group">
+            <label for="exam-date">Exam Date</label>
+            <input type="date" id="exam-date" value="2026-11-06">
+        </div>
+        
+        <div class="form-group">
+            <label for="weak-topics">Topics Needing Focus (Weak Areas)</label>
+            <input type="text" id="weak-topics" placeholder="e.g., ArrayList, Recursion" value="ArrayList, Recursion">
+        </div>
+        
+        <div class="form-group">
+            <label for="study-hours">Daily Available Study Time (Hours)</label>
+            <input type="number" id="study-hours" min="1" max="24" value="2">
+        </div>
+        
+        <button type="button" onclick="generatePlan()">Generate AI Custom Plan</button>
+    </div>
+
+    <div id="result-section" class="result-section">
+        <h2>Your Learning Dashboard</h2>
+        
+        <div class="dashboard">
+            <div class="dashboard-item">
+                <div>Time Remaining</div>
+                <div id="d-day-val" class="value">D-00</div>
+            </div>
+            <div class="dashboard-item">
+                <div>Current Completion Rate</div>
+                <div id="progress-val" class="value">0%</div>
+            </div>
+        </div>
+
+        <label>Overall Progress</label>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+
+        <h2>Recommended Study Schedule (AI Mock Output)</h2>
+        <table id="schedule-table">
+            <thead>
+                <tr>
+                    <th class="checkbox-cell">Done</th>
+                    <th>Timeline</th>
+                    <th>Study Tasks & Contents</th>
+                </tr>
+            </thead>
+            <tbody id="schedule-body">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function generatePlan() {
+        const examDateInput = document.getElementById('exam-date').value;
+        if (!examDateInput) {
+            alert('Please select an exam date!');
+            return;
+        }
+
+        // 1. D-Day Calculation Logic (CS Core Concept Alignment)
+        const today = new Date();
+        const examDate = new Date(examDateInput);
+        const timeDiff = examDate.getTime() - today.getTime();
+        const dDay = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        
+        document.getElementById('d-day-val').innerText = dDay > 0 ? `D-${dDay}` : (dDay === 0 ? "D-Day" : `Passed`);
+
+        // 2. Structuring Mock Response (Emulating future AI API payload parsing)
+        const weakTopic = document.getElementById('weak-topics').value || "Core Theories";
+        const hours = document.getElementById('study-hours').value || "2";
+        
+        const mockTemplates = [
+            { period: "Week 1: Foundations", task: `Intensive study on [${weakTopic}] conceptual review and example analysis (${hours} hours/day).` },
+            { period: "Week 2: Practice", task: "Solve relevant multiple-choice questions (MCQs) and review underlying algorithm structures." },
+            { period: "Week 3: FRQ Practice", task: "Execute timed Free Response Questions (FRQs) and analyze structural constraints." },
+            { period: "Day Before Exam", task: "Final review of personal error logs and performance optimization templates." }
+        ];
+
+        const tbody = document.getElementById('schedule-body');
+        tbody.innerHTML = ""; // Clear existing records
+
+        mockTemplates.forEach((item, index) => {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td class="checkbox-cell"><input type="checkbox" onchange="updateProgress()" id="check-${index}"></td>
+                <td><strong>${item.period}</strong></td>
+                <td id="text-${index}">${item.task}</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        // Toggle UI Display Visibility
+        document.getElementById('result-section').style.display = 'block';
+        updateProgress();
+    }
+
+    // 3. Progress Metric Calculation Algorithm (Looping and Boolean evaluation)
+    function updateProgress() {
+        const checkboxes = document.querySelectorAll('#schedule-body input[type="checkbox"]');
+        if (checkboxes.length === 0) return;
+
+        let checkedCount = 0;
+        checkboxes.forEach((cb, index) => {
+            const textCell = document.getElementById(`text-${index}`);
+            if (cb.checked) {
+                checkedCount++;
+                textCell.classList.add('completed-text');
+            } else {
+                textCell.classList.remove('completed-text');
+            }
+        });
+
+        // Numeric percentage conversion logic
+        const percentage = Math.round((checkedCount / checkboxes.length) * 100);
+        
+        // Dynamic DOM style updates
+        document.getElementById('progress-val').innerText = `${percentage}%`;
+        document.getElementById('progress-bar').style.width = `${percentage}%`;
+    }
+</script>
+
+</body>
+</html>
