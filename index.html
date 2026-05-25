@@ -204,39 +204,86 @@
         <div class="form-group">
             <label for="exam-name">1. Select Target Subject</label>
             <select id="exam-name">
-                <optgroup label="Computer Science & Math (AP)">
+                <optgroup label="AP Math & Computer Science">
                     <option value="AP Computer Science A">AP Computer Science A</option>
                     <option value="AP Computer Science Principles">AP Computer Science Principles</option>
                     <option value="AP Calculus AB">AP Calculus AB</option>
                     <option value="AP Calculus BC">AP Calculus BC</option>
                     <option value="AP Statistics">AP Statistics</option>
+                    <option value="AP Precalculus">AP Precalculus</option>
                 </optgroup>
-                <optgroup label="Sciences (AP)">
-                    <option value="AP Physics 1 / C">AP Physics 1 / C</option>
+                <optgroup label="AP Sciences">
+                    <option value="AP Physics 1: Algebra-Based">AP Physics 1</option>
+                    <option value="AP Physics 2: Algebra-Based">AP Physics 2</option>
+                    <option value="AP Physics C: Mechanics">AP Physics C: Mechanics</option>
+                    <option value="AP Physics C: Electricity & Magnetism">AP Physics C: E&M</option>
                     <option value="AP Chemistry">AP Chemistry</option>
                     <option value="AP Biology">AP Biology</option>
                     <option value="AP Environmental Science">AP Environmental Science</option>
                 </optgroup>
-                <optgroup label="History & Social Sciences (AP)">
+                <optgroup label="AP History & Social Sciences">
                     <option value="AP U.S. History">AP U.S. History</option>
-                    <option value="AP World History">AP World History</option>
+                    <option value="AP World History: Modern">AP World History</option>
                     <option value="AP European History">AP European History</option>
-                    <option value="AP Macro/Microeconomics">AP Macro/Microeconomics</option>
+                    <option value="AP Human Geography">AP Human Geography</option>
+                    <option value="AP Macroeconomics">AP Macroeconomics</option>
+                    <option value="AP Microeconomics">AP Microeconomics</option>
                     <option value="AP Psychology">AP Psychology</option>
+                    <option value="AP U.S. Government & Politics">AP U.S. Government</option>
+                    <option value="AP Comparative Government & Politics">AP Comparative Government</option>
                 </optgroup>
-                <optgroup label="English & Languages (AP)">
-                    <option value="AP English Language & Composition">AP English Language & Composition</option>
-                    <option value="AP English Literature & Composition">AP English Literature & Composition</option>
+                <optgroup label="AP English, Capstone & Arts">
+                    <option value="AP English Language & Composition">AP English Language</option>
+                    <option value="AP English Literature & Composition">AP English Literature</option>
+                    <option value="AP Seminar">AP Seminar</option>
+                    <option value="AP Research">AP Research</option>
+                    <option value="AP Art History">AP Art History</option>
+                    <option value="AP Music Theory">AP Music Theory</option>
+                    <option value="AP 2-D Art and Design">AP 2-D Art and Design</option>
+                    <option value="AP 3-D Art and Design">AP 3-D Art and Design</option>
+                    <option value="AP Drawing">AP Drawing</option>
                 </optgroup>
-                <optgroup label="School GPA Courses (Honors / Regular)">
-                    <option value="Algebra 1 / 2 (Honors)">Algebra 1 / 2 (Honors)</option>
-                    <option value="Geometry (Honors)">Geometry (Honors)</option>
-                    <option value="Pre-Calculus (Honors)">Pre-Calculus (Honors)</option>
-                    <option value="Biology (Honors/Regular)">Biology (Honors/Regular)</option>
-                    <option value="Chemistry (Honors/Regular)">Chemistry (Honors/Regular)</option>
-                    <option value="Physics (Honors/Regular)">Physics (Honors/Regular)</option>
-                    <option value="World History (Honors/Regular)">World History (Honors/Regular)</option>
-                    <option value="English 9-12 (Honors/Regular)">English 9-12 (Honors/Regular)</option>
+                <optgroup label="AP World Languages">
+                    <option value="AP Chinese Language & Culture">AP Chinese Language</option>
+                    <option value="AP Spanish Language & Culture">AP Spanish Language</option>
+                    <option value="AP French Language & Culture">AP French Language</option>
+                    <option value="AP German Language & Culture">AP German Language</option>
+                    <option value="AP Japanese Language & Culture">AP Japanese Language</option>
+                    <option value="AP Latin">AP Latin</option>
+                    <option value="AP Italian Language & Culture">AP Italian Language</option>
+                </optgroup>
+
+                <optgroup label="School Finals & Electives (G9-G12)">
+                    <option value="G9 English Finals">G9 English Finals</option>
+                    <option value="G10 English Finals">G10 English Finals</option>
+                    <option value="G11 English Finals">G11 English Finals</option>
+                    <option value="G12 English Finals">G12 English Finals</option>
+                    <option value="G9 World History (Finals)">G9 World History (Finals)</option>
+                    <option value="Algebra 1 & 2">Algebra 1 & 2</option>
+                    <option value="Geometry">Geometry</option>
+                    <option value="Pre-Calculus / Calculus">Pre-Calculus / Calculus</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Environmental Science">Environmental Science</option>
+                    <option value="G10 Economics">G10 Economics</option>
+                    <option value="Macroeconomics (Regular)">Macroeconomics (Regular)</option>
+                    <option value="Microeconomics (Regular)">Microeconomics (Regular)</option>
+                    <option value="Business">Business</option>
+                    <option value="Psychology">Psychology</option>
+                    <option value="Human Geography (HG)">Human Geography (HG)</option>
+                    <option value="Statistics">Statistics</option>
+                    <option value="G9-G12 Chinese">G9-G12 Chinese</option>
+                    <option value="G9-G12 Spanish">G9-G12 Spanish</option>
+                </optgroup>
+
+                <optgroup label="Middle School Evaluation (G7-G8)">
+                    <option value="G7 English Finals">G7 English Finals</option>
+                    <option value="G8 English Finals">G8 English Finals</option>
+                    <option value="G7/G8 Math">G7/G8 Math</option>
+                    <option value="G7/G8 Science">G7/G8 Science</option>
+                    <option value="G7/G8 Social Studies / SS">G7/G8 Social Studies / SS</option>
+                    <option value="G7/G8 World Language">G7/G8 World Language</option>
                 </optgroup>
             </select>
         </div>
@@ -307,7 +354,7 @@
 <script>
     let generatedPlanText = "";
 
-    // Set default target date to 30 days from today
+    // Set default target date to 30 days from today automatically
     window.onload = function() {
         const defaultDate = new Date();
         defaultDate.setDate(defaultDate.getDate() + 30);
@@ -348,7 +395,7 @@
         generatedPlanText = `=== AI Custom Study Roadmap for ${subject} ===\n`;
         generatedPlanText += `Remaining Time: D-${dDay} | Target Study: ${hours} Hours Daily\n\n`;
 
-        // Strategy allocation algorithm based on chosen starting points
+        // Strategy allocation templates based on chosen starting levels
         let taskTemplates = [];
 
         if (level === "zero") {
@@ -382,8 +429,8 @@
             ];
         }
 
-        // Mapping loop algorithm relative to remaining D-Day value
-        const totalDaysToShow = Math.min(dDay, 30); // Max cap at 30 days for design balance
+        // Mapping loop algorithm relative to the remaining D-Day value
+        const totalDaysToShow = Math.min(dDay, 30); // Balanced rendering limit at max 30 rows
         
         for (let i = 0; i < totalDaysToShow; i++) {
             const templateItem = taskTemplates[i % taskTemplates.length];
@@ -395,7 +442,7 @@
             let displayType = templateItem.type;
             let displayTask = templateItem.task;
             
-            // Allocate final 2 days for structural exam wrappers
+            // Allocate the final two wrap-up wrapping elements dynamically
             if (i === totalDaysToShow - 2) {
                 badgeClass = "badge-danger";
                 displayType = "Final";
