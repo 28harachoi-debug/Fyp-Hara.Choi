@@ -6,7 +6,7 @@
     <title>SmartStudy AI - Emergency 30-Day Crash Course Planner</title>
     <style>
         :root {
-            --primary-color: #e74c3c; /* 긴급 상황을 나타내는 Red 계열로 변경 */
+            --primary-color: #e74c3c;
             --secondary-color: #f5f7fa;
             --text-color: #333333;
             --accent-color: #2ecc71;
@@ -72,9 +72,13 @@
             cursor: not-allowed;
         }
 
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+
         button {
-            display: block;
-            width: 100%;
+            flex: 1;
             padding: 14px;
             background-color: var(--primary-color);
             color: white;
@@ -88,6 +92,13 @@
 
         button:hover {
             background-color: #c0392b;
+        }
+
+        .btn-export {
+            background-color: #34495e;
+        }
+        .btn-export:hover {
+            background-color: #2c3e50;
         }
 
         .result-section {
@@ -198,7 +209,7 @@
         </div>
         
         <div class="form-group">
-            <label for="exam-date">Set Exam Date (Set to 30 days from now for testing)</label>
+            <label for="exam-date">Set Exam Date</label>
             <input type="date" id="exam-date">
         </div>
         
@@ -212,7 +223,10 @@
             <input type="text" id="study-hours" value="3 Hours / Day" readonly>
         </div>
         
-        <button type="button" onclick="generateEmergencyPlan()">Generate 30-Day Emergency Roadmap</button>
+        <div class="btn-container">
+            <button type="button" onclick="generateEmergencyPlan()">Generate 30-Day Emergency Roadmap</button>
+            <button type="button" class="btn-export" onclick="exportScheduleTxt()">Export as TXT</button>
+        </div>
     </div>
 
     <div id="result-section" class="result-section">
@@ -254,7 +268,9 @@
 </div>
 
 <script>
-    // 페이지 로드 시 자동으로 오늘 기준 30일 뒤를 기본 날짜로 세팅해 주는 편의 기능
+    // 전역 스케줄 텍스트 저장용 변수 (다운로드 기능용)
+    let generatedPlanText = "";
+
     window.onload = function() {
         const defaultDate = new Date();
         defaultDate.setDate(defaultDate.getDate() + 30);
@@ -269,60 +285,75 @@
         }
 
         const today = new Date();
+        today.setHours(0,0,0,0);
         const examDate = new Date(examDateInput);
+        examDate.setHours(0,0,0,0);
+        
+        // [추가 기능] 1. Exception Handling: 날짜 유효성 검사 알고리즘
+        if (examDate < today) {
+            alert("Error: The exam date cannot be in the past! Please select a valid future date.");
+            return;
+        }
+
         const timeDiff = examDate.getTime() - today.getTime();
         const dDay = Math.ceil(timeDiff / (1000 * 3600 * 24));
         
         document.getElementById('d-day-val').innerText = `D-${dDay}`;
 
         const scheduleBody = document.getElementById('schedule-body');
-        scheduleBody.innerHTML = ""; // 초기화
+        scheduleBody.innerHTML = ""; 
+        generatedPlanText = `=== AP CS A 30-Day Emergency Study Plan (D-${dDay} Remaining) ===\n\n`;
 
-        // 30일 노베이스 탈출 최적화 커리큘럼 데이터 배열 (총 30개 항목)
         const emergencyCurriculum = [
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 1: Primitive Types & Variables. Study int, double, boolean and casting fundamentals." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 1 Practice: Write basic arithmetic expressions and trace system outputs." },
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 2: Using Objects. Understand String methods, Math class, and Wrapper classes." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 2 Practice: Instantiating objects and calling methods with parameters." },
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 3: Boolean Expressions & If Statements. Conditional logic and De Morgan's Laws." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 3 Practice: Write nested if-else structures and truth table check logs." },
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 4: Iteration. Mastering for loops, while loops, and string loops." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 4 Practice: Code nested loops to print patterns and trace loop iterations." },
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 5: Writing Classes. Understanding constructors, encapsulation, and documentation." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 5 Practice: Design a custom class from scratch with private variables and public methods." },
-            
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 6: Arrays. 1D Array creation, indexing, and traversal algorithms." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 6 Practice: Code basic array algorithms (finding min/max, calculating averages)." },
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 7: ArrayList. Understanding dynamic lists, methods (add, remove, set), and bounds." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 7 Practice: Write loops to modify ArrayLists safely without concurrent errors." },
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 8: 2D Arrays. Row-major vs Column-major order tracking structures." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 8 Practice: Traverse 2D arrays using nested loops to search or filter values." },
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 9: Inheritance. Superclasses, subclasses, polymorphism, and method overriding." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 9 Practice: Build inheritance hierarchies and test polymorphic method behaviors." },
-            { type: '<span class="badge badge-theory">Theory</span>', task: "Unit 10: Recursion. Base cases, recursive calls, and tracing recursion trees." },
-            { type: '<span class="badge badge-code">Coding</span>', task: "Unit 10 Practice: Manually trace recursive code blocks and identify stack overflow bugs." },
-            
-            { type: '<span class="badge badge-review">FRQ Core</span>', task: "FRQ Strategy Day 1: Methods and Control Structures (Focusing on Unit 1-4 elements)." },
-            { type: '<span class="badge badge-review">FRQ Core</span>', task: "FRQ Strategy Day 2: Class Design requirements. Write comprehensive structures on paper." },
-            { type: '<span class="badge badge-review">FRQ Core</span>', task: "FRQ Strategy Day 3: Array/ArrayList manipulation routines (The highest scoring criteria)." },
-            { type: '<span class="badge badge-review">FRQ Core</span>', task: "FRQ Strategy Day 4: 2D Array grids traversal techniques and boundary setups." },
-            { type: '<span class="badge badge-review">Mock Exam</span>', task: "Full Diagnostic Mock Test 1: Real-time mock session under strict limits." },
-            { type: '<span class="badge badge-review">Review</span>', task: "Deconstruct Mock Test 1: Log mistakes, isolate logic gaps, re-read concepts." },
-            { type: '<span class="badge badge-review">Mock Exam</span>', task: "Full Diagnostic Mock Test 2: Apply fixes to elevate scoring trends." },
-            { type: '<span class="badge badge-review">Review</span>', task: "Deconstruct Mock Test 2: Double check AP Java Quick Reference sheets definitions." },
-            { type: '<span class="badge badge-danger">Final Check</span>', task: "Review unified personal error log records and review critical default keywords." },
-            { type: '<span class="badge badge-danger">Exam Day</span>', task: "Final Mind Control. Trust the 30 days of consistent 3-hour daily execution." }
+            { type: "Theory", label: "Unit 1: Primitive Types", task: "Variables, int/double casting rules, and compiler behaviors." },
+            { type: "Coding", label: "Unit 1 Practice", task: "Write basic arithmetic expressions and observe truncation logs." },
+            { type: "Theory", label: "Unit 2: Using Objects", task: "String methods (substring, indexOf), Math class, and wrappers." },
+            { type: "Coding", label: "Unit 2 Practice", task: "Instantiate objects via constructors and execute void/return methods." },
+            { type: "Theory", label: "Unit 3: Boolean Expressions", task: "Logical operators, short-circuit evaluation, and De Morgan's Laws." },
+            { type: "Coding", label: "Unit 3 Practice", task: "Implement complex nested if-else statements for grade analyzers." },
+            { type: "Theory", label: "Unit 4: Iteration", task: "Structure of for loops, while loops, and tracing loops variations." },
+            { type: "Coding", label: "Unit 4 Practice", task: "Build algorithms using nested loops to trace patterns and string indexes." },
+            { type: "Theory", label: "Unit 5: Writing Classes", task: "Private fields, public constructors, accessor/mutator structures." },
+            { type: "Coding", label: "Unit 5 Practice", task: "Encapsulate data models and design a functional custom class layout." },
+            { type: "Theory", label: "Unit 6: Arrays", task: "1D Array allocation, static bounds, and default primitive initializations." },
+            { type: "Coding", label: "Unit 6 Practice", task: "Implement basic search array algorithms (minimum, maximum element sweeps)." },
+            { type: "Theory", label: "Unit 7: ArrayList", task: "Dynamic allocation, list methods (add, remove, set) and size shifts." },
+            { type: "Coding", label: "Unit 7 Practice", task: "Traverse and remove specific items without hitting ConcurrentModification errors." },
+            { type: "Theory", label: "Unit 8: 2D Arrays", task: "Row-major vs Column-major configurations and memory addressing." },
+            { type: "Coding", label: "Unit 8 Practice", task: "Process tabular datasets using loops to map data patterns." },
+            { type: "Theory", label: "Unit 9: Inheritance", task: "Superclass/subclass trees, polymorphism, method overriding, and constructors." },
+            { type: "Coding", label: "Unit 9 Practice", task: "Code functional extends structures and verify implicit casting behaviors." },
+            { type: "Theory", label: "Unit 10: Recursion", task: "Base cases, structural execution stacks, and tracing tree nodes." },
+            { type: "Coding", label: "Unit 10 Practice", task: "Perform tracing on paper for complex factorial or fibonacci stacks." },
+            { type: "FRQ Core", label: "FRQ Tactics 1", task: "Analyze Methods and Control Structures requirements." },
+            { type: "FRQ Core", label: "FRQ Tactics 2", task: "Review class architecture criteria and object instantiation grids." },
+            { type: "FRQ Core", label: "FRQ Tactics 3", task: "Implement complex Array/ArrayList data filters (High score yield)." },
+            { type: "FRQ Core", label: "FRQ Tactics 4", task: "Construct 2D array grid locators and boundary constraint models." },
+            { type: "Mock Exam", label: "Diagnostic Test 1", task: "Take a full length practice exam with strict timeline boundaries." },
+            { type: "Review", label: "Error Logging 1", task: "Isolate structural gaps, trace flawed MCQs logic blocks." },
+            { type: "Mock Exam", label: "Diagnostic Test 2", task: "Execute second full-length test to optimize pacing metrics." },
+            { type: "Review", label: "Error Logging 2", task: "Verify edge-case handling routines and check default variable setups." },
+            { type: "Final Check", label: "Sheet Review", task: "Final trace of personal error logs and official Java Quick Reference document rules." },
+            { type: "Exam Day", label: "Execution", task: "Arrive prepared. Execute 30 days of structured 3-hour habits." }
         ];
 
-        // 1일부터 30일까지 빈틈없이 테이블 행 생성 알고리즘
         for (let i = 0; i < 30; i++) {
+            const item = emergencyCurriculum[i];
+            let badgeClass = "badge-theory";
+            if (item.type === "Coding") badgeClass = "badge-code";
+            if (item.type === "FRQ Core" || item.type === "Mock Exam" || item.type === "Review") badgeClass = "badge-review";
+            if (item.type === "Final Check" || item.type === "Exam Day") badgeClass = "badge-danger";
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="checkbox-cell"><input type="checkbox" onchange="updateProgress()" id="check-${i}"></td>
                 <td><strong>Day ${i + 1}</strong></td>
-                <td id="text-${i}">${emergencyCurriculum[i].type} ${emergencyCurriculum[i].task}</td>
+                <td id="text-${i}"><span class="badge ${badgeClass}">${item.type}</span> <strong>${item.label}</strong>: ${item.task}</td>
             `;
             scheduleBody.appendChild(row);
+
+            // 다운로드용 텍스트 구축
+            generatedPlanText += `[Day ${i + 1}] (${item.type}) ${item.label} - ${item.task}\n`;
         }
 
         document.getElementById('result-section').style.display = 'block';
@@ -345,9 +376,22 @@
         });
 
         const percentage = Math.round((checkedCount / checkboxes.length) * 100);
-        
         document.getElementById('progress-val').innerText = `${checkedCount} / ${checkboxes.length} (${percentage}%)`;
         document.getElementById('progress-bar').style.width = `${percentage}%`;
+    }
+
+    // [추가 기능] 2. 데이터 처리 알고리즘: 생성된 30일치 텍스트 파일 내보내기 (.txt File IO)
+    function exportScheduleTxt() {
+        if (!generatedPlanText) {
+            alert("Please generate the roadmap first before exporting!");
+            return;
+        }
+        const blob = new Blob([generatedPlanText], { type: "text/plain;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "AP_CS_A_30Day_Emergency_Plan.txt";
+        link.click();
+        URL.revokeObjectURL(link.href);
     }
 </script>
 
