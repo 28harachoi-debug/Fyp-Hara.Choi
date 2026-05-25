@@ -204,34 +204,34 @@
         <div class="form-group">
             <label for="exam-name">1. Select Target Subject</label>
             <select id="exam-name">
-                <optgroup label="High School Courses (G9-G12)">
-                    <option value="English">English</option>
-                    <option value="World History">World History</option>
-                    <option value="Geometry">Geometry</option>
-                    <option value="Human Geography">Human Geography</option>
-                    <option value="Business">Business</option>
-                    <option value="Psychology">Psychology</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Algebra 1 & 2">Algebra 1 & 2</option>
-                    <option value="Economics">Economics</option>
-                    <option value="Macroeconomics">Macroeconomics</option>
-                    <option value="Microeconomics">Microeconomics</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Spanish">Spanish</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Environmental Science">Environmental Science</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Calculus / Precalculus">Calculus / Precalculus</option>
-                    <option value="Statistics">Statistics</option>
+                <optgroup label="Middle School Courses (G7 - G8)">
+                    <option value="G7/G8 English">English</option>
+                    <option value="G7/G8 Math">Math</option>
+                    <option value="G7/G8 Science">Science</option>
+                    <option value="G7/G8 Social Studies">Social Studies</option>
+                    <option value="G7/G8 World Language">World Language</option>
                 </optgroup>
 
-                <optgroup label="Middle School Courses (G7-G8)">
-                    <option value="G7/G8 English">G7/G8 English</option>
-                    <option value="G7/G8 Social Studies">G7/G8 Social Studies</option>
-                    <option value="G7/G8 World Language">G7/G8 World Language</option>
-                    <option value="G7/G8 Math">G7/G8 Math</option>
-                    <option value="G7/G8 Science">G7/G8 Science</option>
+                <optgroup label="High School Courses (G9 - G12)">
+                    <option value="Algebra 1 & 2">Algebra 1 & 2</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Business">Business</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="AP Computer Science">Computer Science (AP)</option>
+                    <option value="Economics">Economics</option>
+                    <option value="English">English</option>
+                    <option value="Environmental Science">Environmental Science</option>
+                    <option value="Geometry">Geometry</option>
+                    <option value="AP Human Geography">Human Geography (AP)</option>
+                    <option value="AP Macroeconomics">Macroeconomics (AP)</option>
+                    <option value="AP Microeconomics">Microeconomics (AP)</option>
+                    <option value="Physics">Physics</option>
+                    <option value="AP Calculus / Precalculus">Pre-Calculus / Calculus (AP)</option>
+                    <option value="AP Psychology">Psychology (AP)</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="AP Statistics">Statistics (AP)</option>
+                    <option value="AP World History">World History (AP)</option>
                 </optgroup>
             </select>
         </div>
@@ -302,7 +302,6 @@
 <script>
     let generatedPlanText = "";
 
-    // Set default target date to 30 days from today automatically
     window.onload = function() {
         const defaultDate = new Date();
         defaultDate.setDate(defaultDate.getDate() + 30);
@@ -321,7 +320,6 @@
         const examDate = new Date(examDateInput);
         examDate.setHours(0,0,0,0);
         
-        // Exception Handling: Prevent selecting a past date
         if (examDate < today) {
             alert("Error: The exam date cannot be in the past!");
             return;
@@ -334,7 +332,6 @@
         const level = document.getElementById('start-level').value;
         const hours = document.getElementById('study-hours').value;
 
-        // Update dashboard UI elements
         document.getElementById('d-day-val').innerText = `D-${dDay}`;
         document.getElementById('subject-val').innerText = subject;
 
@@ -343,7 +340,6 @@
         generatedPlanText = `=== AI Custom Study Roadmap for ${subject} ===\n`;
         generatedPlanText += `Remaining Time: D-${dDay} | Target Study: ${hours} Hours Daily\n\n`;
 
-        // Strategy allocation templates based on chosen starting levels
         let taskTemplates = [];
 
         if (level === "zero") {
@@ -372,8 +368,7 @@
             ];
         }
 
-        // Mapping loop algorithm relative to the remaining D-Day value
-        const totalDaysToShow = Math.min(dDay, 30); // Balanced rendering limit at max 30 rows
+        const totalDaysToShow = Math.min(dDay, 30);
         
         for (let i = 0; i < totalDaysToShow; i++) {
             const templateItem = taskTemplates[i % taskTemplates.length];
@@ -385,7 +380,6 @@
             let displayType = templateItem.type;
             let displayTask = templateItem.task;
             
-            // Allocate the final two wrap-up wrapping elements dynamically
             if (i === totalDaysToShow - 2) {
                 badgeClass = "badge-danger";
                 displayType = "Final";
