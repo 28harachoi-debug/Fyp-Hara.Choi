@@ -204,86 +204,34 @@
         <div class="form-group">
             <label for="exam-name">1. Select Target Subject</label>
             <select id="exam-name">
-                <optgroup label="AP Math & Computer Science">
-                    <option value="AP Computer Science A">AP Computer Science A</option>
-                    <option value="AP Computer Science Principles">AP Computer Science Principles</option>
-                    <option value="AP Calculus AB">AP Calculus AB</option>
-                    <option value="AP Calculus BC">AP Calculus BC</option>
-                    <option value="AP Statistics">AP Statistics</option>
-                    <option value="AP Precalculus">AP Precalculus</option>
-                </optgroup>
-                <optgroup label="AP Sciences">
-                    <option value="AP Physics 1: Algebra-Based">AP Physics 1</option>
-                    <option value="AP Physics 2: Algebra-Based">AP Physics 2</option>
-                    <option value="AP Physics C: Mechanics">AP Physics C: Mechanics</option>
-                    <option value="AP Physics C: Electricity & Magnetism">AP Physics C: E&M</option>
-                    <option value="AP Chemistry">AP Chemistry</option>
-                    <option value="AP Biology">AP Biology</option>
-                    <option value="AP Environmental Science">AP Environmental Science</option>
-                </optgroup>
-                <optgroup label="AP History & Social Sciences">
-                    <option value="AP U.S. History">AP U.S. History</option>
-                    <option value="AP World History: Modern">AP World History</option>
-                    <option value="AP European History">AP European History</option>
-                    <option value="AP Human Geography">AP Human Geography</option>
-                    <option value="AP Macroeconomics">AP Macroeconomics</option>
-                    <option value="AP Microeconomics">AP Microeconomics</option>
-                    <option value="AP Psychology">AP Psychology</option>
-                    <option value="AP U.S. Government & Politics">AP U.S. Government</option>
-                    <option value="AP Comparative Government & Politics">AP Comparative Government</option>
-                </optgroup>
-                <optgroup label="AP English, Capstone & Arts">
-                    <option value="AP English Language & Composition">AP English Language</option>
-                    <option value="AP English Literature & Composition">AP English Literature</option>
-                    <option value="AP Seminar">AP Seminar</option>
-                    <option value="AP Research">AP Research</option>
-                    <option value="AP Art History">AP Art History</option>
-                    <option value="AP Music Theory">AP Music Theory</option>
-                    <option value="AP 2-D Art and Design">AP 2-D Art and Design</option>
-                    <option value="AP 3-D Art and Design">AP 3-D Art and Design</option>
-                    <option value="AP Drawing">AP Drawing</option>
-                </optgroup>
-                <optgroup label="AP World Languages">
-                    <option value="AP Chinese Language & Culture">AP Chinese Language</option>
-                    <option value="AP Spanish Language & Culture">AP Spanish Language</option>
-                    <option value="AP French Language & Culture">AP French Language</option>
-                    <option value="AP German Language & Culture">AP German Language</option>
-                    <option value="AP Japanese Language & Culture">AP Japanese Language</option>
-                    <option value="AP Latin">AP Latin</option>
-                    <option value="AP Italian Language & Culture">AP Italian Language</option>
-                </optgroup>
-
-                <optgroup label="School Finals & Electives (G9-G12)">
-                    <option value="G9 English Finals">G9 English Finals</option>
-                    <option value="G10 English Finals">G10 English Finals</option>
-                    <option value="G11 English Finals">G11 English Finals</option>
-                    <option value="G12 English Finals">G12 English Finals</option>
-                    <option value="G9 World History (Finals)">G9 World History (Finals)</option>
-                    <option value="Algebra 1 & 2">Algebra 1 & 2</option>
+                <optgroup label="High School Courses (G9-G12)">
+                    <option value="English">English</option>
+                    <option value="World History">World History</option>
                     <option value="Geometry">Geometry</option>
-                    <option value="Pre-Calculus / Calculus">Pre-Calculus / Calculus</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Environmental Science">Environmental Science</option>
-                    <option value="G10 Economics">G10 Economics</option>
-                    <option value="Macroeconomics (Regular)">Macroeconomics (Regular)</option>
-                    <option value="Microeconomics (Regular)">Microeconomics (Regular)</option>
+                    <option value="Human Geography">Human Geography</option>
                     <option value="Business">Business</option>
                     <option value="Psychology">Psychology</option>
-                    <option value="Human Geography (HG)">Human Geography (HG)</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Algebra 1 & 2">Algebra 1 & 2</option>
+                    <option value="Economics">Economics</option>
+                    <option value="Macroeconomics">Macroeconomics</option>
+                    <option value="Microeconomics">Microeconomics</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Environmental Science">Environmental Science</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Calculus / Precalculus">Calculus / Precalculus</option>
                     <option value="Statistics">Statistics</option>
-                    <option value="G9-G12 Chinese">G9-G12 Chinese</option>
-                    <option value="G9-G12 Spanish">G9-G12 Spanish</option>
                 </optgroup>
 
-                <optgroup label="Middle School Evaluation (G7-G8)">
-                    <option value="G7 English Finals">G7 English Finals</option>
-                    <option value="G8 English Finals">G8 English Finals</option>
+                <optgroup label="Middle School Courses (G7-G8)">
+                    <option value="G7/G8 English">G7/G8 English</option>
+                    <option value="G7/G8 Social Studies">G7/G8 Social Studies</option>
+                    <option value="G7/G8 World Language">G7/G8 World Language</option>
                     <option value="G7/G8 Math">G7/G8 Math</option>
                     <option value="G7/G8 Science">G7/G8 Science</option>
-                    <option value="G7/G8 Social Studies / SS">G7/G8 Social Studies / SS</option>
-                    <option value="G7/G8 World Language">G7/G8 World Language</option>
                 </optgroup>
             </select>
         </div>
@@ -400,32 +348,27 @@
 
         if (level === "zero") {
             taskTemplates = [
-                { type: "Theory", task: `Comprehensive overview of Unit 1 fundamental syntax structure (${hours} hours).` },
+                { type: "Theory", task: `Comprehensive overview of Unit 1 fundamental concepts (${hours} hours).` },
                 { type: "Practice", task: "Solve core concept check questions and trace structural workflows." },
-                { type: "Theory", task: `Study Unit 2 standard library utilities and core functional properties for ${hours} hours.` },
-                { type: "Practice", task: "Practice identifying data types and mapping sample layouts." },
-                { type: "Theory", task: "Unit 3 structural operations and complex branch decision pathways." },
-                { type: "Practice", task: "Complete basic textbook exercises and trace logic truth tables." },
-                { type: "Theory", task: "Unit 4 loop mechanics. Breakdown core properties and exit criteria variables." },
-                { type: "Practice", task: "Trace basic loop variable modifications over multiple iterations manually." }
+                { type: "Theory", task: `Study Unit 2 standard foundational core properties for ${hours} hours.` },
+                { type: "Practice", task: "Practice identifying problem types and mapping sample layouts." },
+                { type: "Theory", task: "Unit 3 structural operations and complex core logic pathways." },
+                { type: "Practice", task: "Complete basic textbook exercises and trace fundamental tables." }
             ];
         } else if (level === "intermediate") {
             taskTemplates = [
-                { type: "Theory", task: `Deep dive into advanced thematic subtopics and index frameworks (${hours} hours).` },
-                { type: "Practice", task: "Implement standard algorithms to re-arrange components and locate metrics." },
-                { type: "Theory", task: `Study complex dynamic lists and mutating operational rules for ${hours} hours.` },
-                { type: "Practice", task: "Trace and resolve standard runtime exceptions inside typical loop segments." },
-                { type: "Theory", task: "Multi-dimensional tracking matrices structures and dimensional data traversals." },
-                { type: "Practice", task: "Solve data filtering worksheets and examine multi-tiered data boundaries." }
+                { type: "Theory", task: `Deep dive into advanced thematic subtopics and frameworks (${hours} hours).` },
+                { type: "Practice", task: "Implement standard application logic to resolve practice problems." },
+                { type: "Theory", task: `Study complex dynamic patterns and operational rules for ${hours} hours.` },
+                { type: "Practice", task: "Trace and resolve standard mistakes inside typical quiz segments." }
             ];
         } else {
             taskTemplates = [
-                { type: "Exam Prep", task: `Intensive review of High-Yield Free Response criteria and rubrics (${hours} hours).` },
+                { type: "Exam Prep", task: `Intensive review of High-Yield test criteria and rubrics (${hours} hours).` },
                 { type: "Practice", task: "Draft full responses on paper matching precise sample constraints." },
                 { type: "Exam Prep", task: `Execute strict timed multiple-choice item sweeps for ${hours} hours.` },
-                { type: "Practice", task: "Analyze wrong answers and isolate recurring logic traps under timed conditions." },
                 { type: "Mock Exam", task: "Run full length diagnostic examination under identical real-world constraints." },
-                { type: "Review", task: "Deconstruct mock assessment metrics and verify formula boundaries logs." }
+                { type: "Review", task: "Deconstruct mock assessment metrics and verify subject boundaries logs." }
             ];
         }
 
