@@ -202,31 +202,61 @@
     
     <div id="planner-form">
         <div class="form-group">
-            <label for="exam-name">1. Select Target Subject (과목 선택)</label>
+            <label for="exam-name">1. Select Target Subject</label>
             <select id="exam-name">
-                <option value="AP Computer Science A">AP Computer Science A</option>
-                <option value="AP Computer Science Principles">AP Computer Science Principles</option>
-                <option value="AP Calculus AB/BC">AP Calculus AB/BC</option>
-                <option value="AP Statistics">AP Statistics</option>
+                <optgroup label="Computer Science & Math (AP)">
+                    <option value="AP Computer Science A">AP Computer Science A</option>
+                    <option value="AP Computer Science Principles">AP Computer Science Principles</option>
+                    <option value="AP Calculus AB">AP Calculus AB</option>
+                    <option value="AP Calculus BC">AP Calculus BC</option>
+                    <option value="AP Statistics">AP Statistics</option>
+                </optgroup>
+                <optgroup label="Sciences (AP)">
+                    <option value="AP Physics 1 / C">AP Physics 1 / C</option>
+                    <option value="AP Chemistry">AP Chemistry</option>
+                    <option value="AP Biology">AP Biology</option>
+                    <option value="AP Environmental Science">AP Environmental Science</option>
+                </optgroup>
+                <optgroup label="History & Social Sciences (AP)">
+                    <option value="AP U.S. History">AP U.S. History</option>
+                    <option value="AP World History">AP World History</option>
+                    <option value="AP European History">AP European History</option>
+                    <option value="AP Macro/Microeconomics">AP Macro/Microeconomics</option>
+                    <option value="AP Psychology">AP Psychology</option>
+                </optgroup>
+                <optgroup label="English & Languages (AP)">
+                    <option value="AP English Language & Composition">AP English Language & Composition</option>
+                    <option value="AP English Literature & Composition">AP English Literature & Composition</option>
+                </optgroup>
+                <optgroup label="School GPA Courses (Honors / Regular)">
+                    <option value="Algebra 1 / 2 (Honors)">Algebra 1 / 2 (Honors)</option>
+                    <option value="Geometry (Honors)">Geometry (Honors)</option>
+                    <option value="Pre-Calculus (Honors)">Pre-Calculus (Honors)</option>
+                    <option value="Biology (Honors/Regular)">Biology (Honors/Regular)</option>
+                    <option value="Chemistry (Honors/Regular)">Chemistry (Honors/Regular)</option>
+                    <option value="Physics (Honors/Regular)">Physics (Honors/Regular)</option>
+                    <option value="World History (Honors/Regular)">World History (Honors/Regular)</option>
+                    <option value="English 9-12 (Honors/Regular)">English 9-12 (Honors/Regular)</option>
+                </optgroup>
             </select>
         </div>
         
         <div class="form-group">
-            <label for="exam-date">2. Set Exam Date (시험 날짜 선택)</label>
+            <label for="exam-date">2. Set Exam / Test Date</label>
             <input type="date" id="exam-date">
         </div>
         
         <div class="form-group">
-            <label for="start-level">3. Choose Your Starting Point (학습 시작포인트 선택)</label>
+            <label for="start-level">3. Choose Your Starting Point</label>
             <select id="start-level">
                 <option value="zero">Zero-Base (Absolute Beginner - Need full concepts)</option>
                 <option value="intermediate">Intermediate (Know basics - Need core practice & logic tracking)</option>
-                <option value="advanced">Advanced (Need intensive FRQ drilling & mock exams only)</option>
+                <option value="advanced">Advanced (Need intensive exam drilling & mock exams only)</option>
             </select>
         </div>
         
         <div class="form-group">
-            <label for="study-hours">4. Daily Study Time (하루 공부 시간 설정)</label>
+            <label for="study-hours">4. Daily Study Time (Hours)</label>
             <input type="number" id="study-hours" min="1" max="24" value="3">
         </div>
         
@@ -277,7 +307,7 @@
 <script>
     let generatedPlanText = "";
 
-    // 오늘 날짜 기준 30일 뒤를 기본값으로 캘린더 세팅
+    // Set default target date to 30 days from today
     window.onload = function() {
         const defaultDate = new Date();
         defaultDate.setDate(defaultDate.getDate() + 30);
@@ -296,7 +326,7 @@
         const examDate = new Date(examDateInput);
         examDate.setHours(0,0,0,0);
         
-        // Exception Handling: 과거 날짜 선택 방지
+        // Exception Handling: Prevent selecting a past date
         if (examDate < today) {
             alert("Error: The exam date cannot be in the past!");
             return;
@@ -309,7 +339,7 @@
         const level = document.getElementById('start-level').value;
         const hours = document.getElementById('study-hours').value;
 
-        // 대시보드 정보 업데이트
+        // Update dashboard UI elements
         document.getElementById('d-day-val').innerText = `D-${dDay}`;
         document.getElementById('subject-val').innerText = subject;
 
@@ -318,68 +348,54 @@
         generatedPlanText = `=== AI Custom Study Roadmap for ${subject} ===\n`;
         generatedPlanText += `Remaining Time: D-${dDay} | Target Study: ${hours} Hours Daily\n\n`;
 
-        // 사용자의 '시작 포인트(Level)' 선택에 맞는 템플릿 알고리즘 분기 설계
+        // Strategy allocation algorithm based on chosen starting points
         let taskTemplates = [];
 
         if (level === "zero") {
-            // 1) 노베이스 선택 시: 이론 위주의 탄탄한 단계별 설계
             taskTemplates = [
-                { type: "Theory", task: `Comprehensive overview of Unit 1 foundational syntax structure (${hours} hours).` },
-                { type: "Coding", task: "Write static variables sample layouts and analyze compiled tracking logs." },
-                { type: "Theory", task: `Study Unit 2 standard library utilities and native method triggers for ${hours} hours.` },
-                { type: "Coding", task: "Practice object instantiation structures using default constructors." },
-                { type: "Theory", task: "Unit 3 Boolean operations and complex nested branch decision pathways." },
-                { type: "Coding", task: "Code functional conditional evaluations and trace nested truth tables." },
-                { type: "Theory", task: "Unit 4 Loop behaviors. Breakdown for-loops and standard while boundaries." },
-                { type: "Coding", task: "Write pattern layouts using nested loops and observe index trace behaviors." },
-                { type: "Theory", task: "Unit 5 Class blueprints design. Restructuring encapsulation visibility properties." },
-                { type: "Coding", task: "Implement private access fields and write custom getter/setter modules." }
+                { type: "Theory", task: `Comprehensive overview of Unit 1 fundamental syntax structure (${hours} hours).` },
+                { type: "Practice", task: "Solve core concept check questions and trace structural workflows." },
+                { type: "Theory", task: `Study Unit 2 standard library utilities and core functional properties for ${hours} hours.` },
+                { type: "Practice", task: "Practice identifying data types and mapping sample layouts." },
+                { type: "Theory", task: "Unit 3 structural operations and complex branch decision pathways." },
+                { type: "Practice", task: "Complete basic textbook exercises and trace logic truth tables." },
+                { type: "Theory", task: "Unit 4 loop mechanics. Breakdown core properties and exit criteria variables." },
+                { type: "Practice", task: "Trace basic loop variable modifications over multiple iterations manually." }
             ];
         } else if (level === "intermediate") {
-            // 2) 기초 보유 선택 시: 배열 탐색, 알고리즘 추적 및 데이터 가공 중심 설계
             taskTemplates = [
-                { type: "Theory", task: `Deep dive into Unit 6 1D Arrays index management systems (${hours} hours).` },
-                { type: "Coding", task: "Implement standard algorithms to swap components and locate min/max metrics." },
-                { type: "Theory", task: `Study Unit 7 dynamic ArrayLists and mutating operations for ${hours} hours.` },
-                { type: "Coding", task: "Trace and resolve ConcurrentModification limits inside standard loops." },
-                { type: "Theory", task: "Unit 8 2D Array matrices configurations. Row-major traversal analysis." },
-                { type: "Coding", task: "Code nested iterations to process grid coordinate boundaries data maps." },
-                { type: "Theory", task: "Unit 9 Polymorphic layouts and method override lookup sequences." },
-                { type: "Coding", task: "Build structured class inheritance trees and utilize super keyword overrides." },
-                { type: "Theory", task: "Unit 10 Recursion mechanics. Track base case constraints and execution pools." },
-                { type: "Coding", task: "Perform manual tree parsing configurations for complex functional stacks." }
+                { type: "Theory", task: `Deep dive into advanced thematic subtopics and index frameworks (${hours} hours).` },
+                { type: "Practice", task: "Implement standard algorithms to re-arrange components and locate metrics." },
+                { type: "Theory", task: `Study complex dynamic lists and mutating operational rules for ${hours} hours.` },
+                { type: "Practice", task: "Trace and resolve standard runtime exceptions inside typical loop segments." },
+                { type: "Theory", task: "Multi-dimensional tracking matrices structures and dimensional data traversals." },
+                { type: "Practice", task: "Solve data filtering worksheets and examine multi-tiered data boundaries." }
             ];
         } else {
-            // 3) 실전형 선택 시: 고난도 FRQ 디버깅 및 전체 모의고사 몰입 설계
             taskTemplates = [
-                { type: "FRQ Core", task: `Intensive review of Category 1 Free Response constraints (${hours} hours).` },
-                { type: "Coding", task: "Write class design layouts on paper matching specific rubrics keys." },
-                { type: "FRQ Core", task: `Execute Category 3 array manipulation routines data sweeps for ${hours} hours.` },
-                { type: "Coding", task: "Code optimal linear scans avoiding indexing out-of-bounds safety traps." },
-                { type: "FRQ Core", task: "Deconstruct Category 4 grid navigation and column traversal strategies." },
-                { type: "Coding", task: "Implement robust grid search functions under strict execution time limits." },
-                { type: "Mock Exam", task: "Run full length mock examination under identical real-world constraints." },
-                { type: "Review", task: "Analyze faulty Multiple Choice logic blocks and patch knowledge gaps." },
-                { type: "Mock Exam", task: "Run second diagnostic assessment mock sweep to elevate tracking curves." },
-                { type: "Review", task: "Re-read official Quick Reference formula syntax constraints sheet definitions." }
+                { type: "Exam Prep", task: `Intensive review of High-Yield Free Response criteria and rubrics (${hours} hours).` },
+                { type: "Practice", task: "Draft full responses on paper matching precise sample constraints." },
+                { type: "Exam Prep", task: `Execute strict timed multiple-choice item sweeps for ${hours} hours.` },
+                { type: "Practice", task: "Analyze wrong answers and isolate recurring logic traps under timed conditions." },
+                { type: "Mock Exam", task: "Run full length diagnostic examination under identical real-world constraints." },
+                { type: "Review", task: "Deconstruct mock assessment metrics and verify formula boundaries logs." }
             ];
         }
 
-        // 사용자의 실제 남은 D-Day 기간에 비례하도록 데이터 확장 반복 루프 (CS Array mapping)
-        const totalDaysToShow = Math.min(dDay, 30); // 최대 30일치로 밸런스 패치 조정
+        // Mapping loop algorithm relative to remaining D-Day value
+        const totalDaysToShow = Math.min(dDay, 30); // Max cap at 30 days for design balance
         
         for (let i = 0; i < totalDaysToShow; i++) {
-            // 템플릿 항목을 순환 적용하여 매일 다른 균형 잡힌 타임라인 노출
             const templateItem = taskTemplates[i % taskTemplates.length];
             
             let badgeClass = "badge-theory";
-            if (templateItem.type === "Coding") badgeClass = "badge-code";
-            if (templateItem.type === "FRQ Core" || templateItem.type === "Mock Exam" || templateItem.type === "Review") badgeClass = "badge-review";
+            if (templateItem.type === "Practice") badgeClass = "badge-code";
+            if (templateItem.type === "Exam Prep" || templateItem.type === "Mock Exam" || templateItem.type === "Review") badgeClass = "badge-review";
 
-            // 마지막 이틀은 시험 마무리 단계로 고정 배치하는 스마트 연산
             let displayType = templateItem.type;
             let displayTask = templateItem.task;
             
+            // Allocate final 2 days for structural exam wrappers
             if (i === totalDaysToShow - 2) {
                 badgeClass = "badge-danger";
                 displayType = "Final";
@@ -433,7 +449,7 @@
         const blob = new Blob([generatedPlanText], { type: "text/plain;charset=utf-8" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "My_Custom_AI_Study_Plan.txt";
+        link.download = "My_Custom_Study_Plan.txt";
         link.click();
         URL.revokeObjectURL(link.href);
     }
